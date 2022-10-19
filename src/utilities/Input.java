@@ -24,9 +24,10 @@ public class Input {
             if(checkPreviousInt) sc.nextLine();
             try {
                 checkPreviousInt = false;
-                return sc.nextLine();
+                String inp = sc.nextLine();
+                if(inp.equals("")) throw new InputMismatchException();
+                return inp;
             } catch (InputMismatchException e) {
-                sc.nextLine();
                 System.out.print(PrintStatements.inputError);
             }
         }

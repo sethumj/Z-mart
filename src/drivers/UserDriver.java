@@ -2,17 +2,17 @@ package drivers;
 
 import superMarket.*;
 import user.User;
-import user.UserDb;
 import user.UserProduct;
 import utilities.Help;
 import utilities.Input;
 import utilities.PrintStatements;
 
-import java.io.PipedReader;
 import java.util.ArrayList;
 
 public class UserDriver implements Driver {
     static private UserDriver userObject = new UserDriver();
+    static private ProductsDatabase productsDatabase = ProductsDatabase.getInstance();
+    static private Order order = Order.getInstance();
     private UserDriver(){
     }
     static UserDriver getInstance(){
@@ -34,7 +34,7 @@ public class UserDriver implements Driver {
                 case 2:
                     user = User.signIn();
                     if(user == null) return;
-                    System.out.println(PrintStatements.userSignInSuccessful + user.getName());
+                    System.out.println(PrintStatements.userSignInSuccessful + user.getName(user));
                     UserDriver.goToMenu(user);
                     break;
                 case 3:
@@ -65,6 +65,7 @@ public class UserDriver implements Driver {
                     UserDriver.goToCart(user);
                     break;
                 case 5:
+                    UserDriver.viewOrders(user);
                     break;
                 case 6:
                     Announcement.viewAnnouncements();
@@ -93,13 +94,13 @@ public class UserDriver implements Driver {
         while(true){
             System.out.println(PrintStatements.enterQuantity);
             quantity = Input.getInteger();
-            if(quantity<=ProductsDatabase.checkQuantity(productId)){
-                Product product = ProductsDatabase.getProduct(productId);
+            if(quantity<=productsDatabase.checkQuantity(productId)){
+                Product product = productsDatabase.getProduct(productId);
                 if(user.checkPresentInCart(productId,user)){
                     return user.updateCart(productId, user, quantity);
 
                 }
-                else if(user.addToCart(new UserProduct(product.productId,product.productName,quantity,product.mrp,product.discountedPrice,product.discount),user)){
+                else if(user.addToCart(new UserProduct(User.orderId,product.getProductId(),product.getProductName(),quantity,product.getMrp(),product.getDiscountedPrice(),product.getDiscount(),user.getName(user),user.getMobileNo(user)),user)){
                     return true;
                 }
             }
@@ -112,35 +113,72 @@ public class UserDriver implements Driver {
     private static void goToCart(User user){
         System.out.println(PrintStatements.viewCart);
         while(true) {
-            user.viewCart();
+            user.viewCart(user);
+            if(user.getCartSize(user)==0)return;
             System.out.println(PrintStatements.cartOptions);
             switch(Input.getInteger()){
                 case 1:
-                    user.viewCart();
-                    System.out.println(PrintStatements.selectFromOption);
-                    UserDriver.modifyCart(Input.getInteger(),user);
+                    user.viewCart(user);
+                    while(true) {
+                        System.out.println(PrintStatements.selectFromOption);
+                        int option = Input.getInteger();
+                        if(option-1>user.getCartSize(user)){
+                            System.out.println(PrintStatements.inputError);
+                            System.out.println(PrintStatements.justTryAgain);
+                        }
+                        else {
+                            UserDriver.modifyCart(option, user);
+                            break;
+                        }
+                    }
                     break;
                 case 2:
-                    here:while(true) {
-                        System.out.println(PrintStatements.enterCoupon);
-                        if (user.redeem(Input.getString(), user)) {
-                            System.out.println(PrintStatements.afterCoupon+user.getTotal(user));
-                            System.out.println(PrintStatements.pressAny);
-                            Input.getString();
-                            Order.orders.add(user.placeOrder(user));
-                        }
-                        else{
-                            while(true) {
-                                System.out.println(PrintStatements.tryAgain);
-                                int option = Input.getInteger();
-                                if (option == 1) continue here;
-                                else if (option == 2) break here;
-                                else {
-                                    System.out.println(PrintStatements.inputError);
+                    if(user.getCartSize(user)<=0){
+                        System.out.println(PrintStatements.noItemInCart);
+                        return;
+                    }
+                    System.out.println(PrintStatements.doYouHaveACoupon);
+                    int choice =  Input.getInteger();
+                    if(choice == 1) {
+                        here:
+                        while (true) {
+                            System.out.println(PrintStatements.enterCoupon);
+                            if (user.redeem(Input.getString(), user)) {
+                                System.out.println(PrintStatements.afterCoupon + user.getCouponTotal(user));
+                                System.out.println(PrintStatements.pressAny);
+                                Input.getString();
+                                order.getOrders().add(user.placeOrder(user));
+                                user.clearCart(user);
+                                System.out.println(PrintStatements.orderPlaced);
+                                order.decreaseProductDatabase();
+                                return;
+                            } else {
+                                while (true) {
+                                    System.out.println(PrintStatements.tryAgain);
+                                    int option = Input.getInteger();
+                                    if (option == 1) continue here;
+                                    else if (option == 2) break here;
+                                    else {
+                                        System.out.println(PrintStatements.inputError);
+                                    }
                                 }
                             }
                         }
                     }
+                    else if(choice == 2) {
+                        System.out.println(PrintStatements.afterCoupon + user.getOrderTotal(user));
+                        System.out.println(PrintStatements.pressAny);
+                        Input.getString();
+                        order.getOrders().add(user.placeOrder(user));
+                        System.out.println(PrintStatements.orderPlaced);
+                        order.decreaseProductDatabase();
+                        user.clearCart(user);
+                        return;
+                    }
+                    else{
+                        System.out.println(PrintStatements.inputError);
+                    }
+
                     break;
                 case 3:
                     return;
@@ -156,16 +194,20 @@ public class UserDriver implements Driver {
         String categoryName = CategoryDatabase.printByCategory();
         search(categoryName,user);
     }
-    private static void search(String product,User user){
-        String productName = product;
-        ArrayList<Integer> tempList = ProductsDatabase.searchForProduct(productName);
+    private static void search(String productName,User user){
+        ArrayList<Integer> tempList = productsDatabase.searchForProduct(productName);
         if(tempList.size() == 0){
             System.out.println(PrintStatements.noSuchThing);
             return;
         }
-        System.out.println(PrintStatements.selectFromOption);
-        int option = Input.getInteger();
-        ProductsDatabase.displayProductDetails(tempList.get(option-1));
+        int option;
+        here:while(true) {
+            System.out.println(PrintStatements.selectFromOption);
+            option = Input.getInteger();
+            if (option-1 >tempList.size() && option-1 <0) continue here;
+            else{break;}
+        }
+        productsDatabase.displayProductDetails(tempList.get(option-1));
         here:while(true) {
             System.out.println(PrintStatements.addToCartMenu);
             switch(Input.getInteger()){
@@ -199,8 +241,9 @@ public class UserDriver implements Driver {
             case 2:
                 System.out.println(PrintStatements.enterQuantity);
                 quantity = Input.getInteger();
-                if(user.checkQuantity(index-1,user,(quantity*2)-quantity)){
-                    if(user.changeQuantity(index-1,user,(quantity*2)-quantity)){
+                if(quantity<0) quantity*=-1;
+                if(user.checkNegativeQuantity(index-1,user,quantity)){
+                    if(user.changeQuantity(index-1,user,quantity-(quantity*2))){
                         System.out.println(PrintStatements.updateSuccessful);
                     }
                 }
@@ -217,6 +260,27 @@ public class UserDriver implements Driver {
                 }
                 break;
             case 4:
+                return;
+            default:
+                System.out.println(PrintStatements.inputError);
+                break;
+        }
+    }
+    private static void viewOrders(User user){
+        user.viewHistory(user);
+        System.out.println(PrintStatements.cancelOrderMenu);
+        switch(Input.getInteger()){
+            case 1:
+                System.out.println(PrintStatements.enterOrderId);
+                if(user.cancelOrder(user,Input.getInteger())){
+                    System.out.println(PrintStatements.cancelled);
+                    return;
+                }
+                else{
+                    System.out.println(PrintStatements.noSuchThing);
+                    break;
+                }
+            case 2:
                 return;
             default:
                 System.out.println(PrintStatements.inputError);

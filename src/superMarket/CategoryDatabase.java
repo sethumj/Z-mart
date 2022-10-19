@@ -16,7 +16,7 @@ public class CategoryDatabase {
         int categoryIndex = AdminDriver.getCategory();
         AdminDriver.printSubCategory(categoryIndex);
         int subCategoryIndex = AdminDriver.getSubCategory(categoryIndex);
-        return CategoryDatabase.categories.get(categoryIndex - 1).subCategory.get(subCategoryIndex - 1);
+        return CategoryDatabase.categories.get(categoryIndex - 1).getSubCategory().get(subCategoryIndex - 1);
     }
 
 }

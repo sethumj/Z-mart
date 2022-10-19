@@ -49,6 +49,8 @@ public class PrintStatements {
     public static String productFullList = "Product id    Product name   quantity    MRP    Discount(%)    Discounted price    Category    Description";
     public static String signInError = "Oops!!! wrong credentials ";
     public static String justTryAgain = "Let's try one more time ";
+    public static String orderReady = "1.Ready\n2.Not ready";
+    public static String readyToDeliver = "1.Delivered\n2.Not Delivered";
     public static String tryAgain = "Wanna Try again enter 1 to return back press 2";
     public static String pressAny = "Press any key to place the order";
     public static String announcementMenu = "1.Add Announcement\n2.Remove Announcement\n3.View Announcements\n4.Back";
@@ -67,6 +69,7 @@ public class PrintStatements {
     public static String setPassword = "Please create a password : ";
     public static String confirmPassword = "Can you confirm your password  : ";
     public static String passwordMismatch = "Password Mismatch please try again ";
+    public static String enterOrderId= "Enter order id : ";
     public static String userSignInSuccessful = "Long-time no see champ! our products are updated give it a look 0~0 ";
     public static String userSignUpSuccessful = "Hooray! I have got a new customer :)";
     public static String notServiceable = "Sorry your location is not Serviceable :(";
@@ -76,15 +79,21 @@ public class PrintStatements {
     public static String productNotAvailable = "Sorry product not Available ";
     public static String accountAlreadyExist = "Your account already exist \n1.Try sign-in\n2.Enter another number";
     public static String addToCartMenu = "1.Add to cart\n2.Back";
-    public static String cartOptions = "1.Edit cart\n2.Place Order\n.Back";
+    public static String cartOptions = "1.Edit cart\n2.Place Order\n3.Back";
     public static String enterCoupon = "Please Enter your Code : ";
     public static String editProducts = "1.Increase Quantity\n2.Decrease Quantity\n3.Remove Item\n4.Back";
     public static String totalAmount = "Your total payable amount is : ₹";
     public static String quantityNotAvailable = "Entered quantity is not available";
     public static String afterCoupon = "You just have to pay : ₹";
+    public static String noItemInCart = "There is no item in the cart";
+    public static String revenueGenerated = "Revenue Generated : ₹";
+    public static String doYouHaveACoupon = "Do You have Coupon code \n1.Yes\n2.No";
     public static String productDetails = "Product name   quantity    MRP    Discount(%)    Discounted price    Category    Description ";
     public static String thankYou = "Thank you for shopping i am expecting to see you again in a while!";
     public static String viewCart = "Your Cart!!!";
+    public static String orderPlaced = "Your Order is Placed!!!";
+    public static String cancelOrderMenu = "1.Cancel\n2.Back";
+    public static String cancelled = "Your order cancelled successfully";
     public static String signMenu = "1.Sign up\n2.Sign in\n3.Back";
 
 
