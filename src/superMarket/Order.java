@@ -13,9 +13,9 @@ public class Order {
         return order;
     }
     private static final ProductsDatabase productsDatabase = ProductsDatabase.getInstance();
-    private final ArrayList<ArrayList<UserProduct>> orders = new ArrayList<ArrayList<UserProduct>>();
-    private final ArrayList<ArrayList<UserProduct>> readyToDeliver = new ArrayList<ArrayList<UserProduct>>();
-    private final ArrayList<ArrayList<UserProduct>> history = new ArrayList<ArrayList<UserProduct>>();
+    private final ArrayList<ArrayList<UserProduct>> orders = new ArrayList<>();
+    private final ArrayList<ArrayList<UserProduct>> readyToDeliver = new ArrayList<>();
+    private final ArrayList<ArrayList<UserProduct>> history = new ArrayList<>();
 
     public ArrayList<ArrayList<UserProduct>> getOrders() {
         return order.orders;
@@ -23,7 +23,7 @@ public class Order {
     public void printOrders(){
         System.out.println(PrintStatements.orderHeader);
         for(int i=0;i<order.orders.size();i++){
-            for(int j=0;j<order.orders.get(i).size();j++){
+            for(int j=0;j<order.orders.get(i).size();){
                 System.out.println(i+1+"."+order.orders.get(i).get(j).getOrderId()+"          "+ order.orders.get(i).get(j).getName() +"          "+ order.orders.get(i).get(j).getMobileNo());
                 break;
             }
@@ -81,7 +81,7 @@ public class Order {
     public void readyOrders(){
         System.out.println(PrintStatements.orderHeader);
         for(int i=0;i<order.readyToDeliver.size();i++){
-            for(int j=0;j<order.readyToDeliver.get(i).size();j++){
+            for(int j=0;j<order.readyToDeliver.get(i).size();){
                 System.out.println(i+1+"."+order.readyToDeliver.get(i).get(j).getOrderId()+"         " +order.readyToDeliver.get(i).get(j).getName() +"          "+ order.readyToDeliver.get(i).get(j).getMobileNo());
                 break;
             }

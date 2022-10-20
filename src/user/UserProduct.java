@@ -4,11 +4,11 @@ public class UserProduct {
     private final String productName;
     private final int productId;
     private int quantity;
-    private float mrp;
+    private final float mrp;
     private final float discountedPrice;
-    private int discount;
-    private String name;
-    private long mobileNo;
+    private final int discount;
+    private final String name;
+    private final long mobileNo;
     private final int orderId;
     public UserProduct(int orderId ,int productId, String productName, int quantity, float mrp, float discountedPrice, int discount,String name,long mobileNo){
         this.orderId = orderId;
@@ -47,5 +47,13 @@ public class UserProduct {
     }
     public int getOrderId() {
         return orderId;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+
+    public float getMrp() {
+        return mrp;
     }
 }

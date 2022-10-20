@@ -9,7 +9,7 @@ public class UserAuthentication {
     public static UserAuthentication getInstance(){
         return userAuthentication;
     }
-    private HashMap<Long,String> userDetails = new HashMap<Long, String>();
+    private final HashMap<Long,String> userDetails = new HashMap<>();
     public void addUser(Long mobileNo,String password){
         userDetails.put(mobileNo,password);
     }

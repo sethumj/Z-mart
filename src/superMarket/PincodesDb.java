@@ -2,14 +2,14 @@ package superMarket;
 
 import java.util.ArrayList;
 public class PincodesDb {
-    private static PincodesDb pincodesDb = new PincodesDb();
+    private static final PincodesDb pincodesDb = new PincodesDb();
     private PincodesDb(){}
     public static PincodesDb getInstance(){
         return pincodesDb;
     }
-    private static ArrayList<Integer> pincodes = new ArrayList<Integer>();
+    private final ArrayList<Integer> pincodes = new ArrayList<>();
 
-    public static ArrayList<Integer> getPincodes() {
+    public ArrayList<Integer> getPincodes() {
         return pincodesDb.pincodes;
     }
 
@@ -17,8 +17,8 @@ public class PincodesDb {
         pincodes.add(pin);
     }
     public boolean checkPincode(int pin){
-        for(int i = 0;i<pincodes.size();i++){
-            if(pin == pincodes.get(i))return true;
+        for (Integer pincode : pincodes) {
+            if (pin == pincode) return true;
         }
         return false;
     }

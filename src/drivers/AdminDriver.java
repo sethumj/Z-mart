@@ -41,10 +41,11 @@ public class AdminDriver implements Driver{
                             System.out.println(PrintStatements.signInError);
                             System.out.println(PrintStatements.tryAgain);
                             int option = Input.getInteger();
-                            if(option==1);
-                            else if(option ==2)return;
-                            else{
-                                System.out.println(PrintStatements.inputError);
+                            if (option != 1) {
+                                if(option ==2)return;
+                                else{
+                                    System.out.println(PrintStatements.inputError);
+                                }
                             }
                         }
                     }
@@ -52,10 +53,11 @@ public class AdminDriver implements Driver{
                         System.out.println(PrintStatements.signInError);
                         System.out.println(PrintStatements.tryAgain);
                         int option = Input.getInteger();
-                        if(option==1);
-                        else if(option ==2)return;
-                        else{
-                            System.out.println(PrintStatements.inputError);
+                        if (option != 1) {
+                            if(option ==2)return;
+                            else{
+                                System.out.println(PrintStatements.inputError);
+                            }
                         }
                     }
                     break;
@@ -140,7 +142,7 @@ public class AdminDriver implements Driver{
         int subCategoryIndex = AdminDriver.getSubCategory(categoryIndex);
         if(subCategoryIndex == -1) return false;
         String subCategoryName = categoryDatabase.categories.get(categoryIndex-1).getSubCategory().get(subCategoryIndex-1);
-        ArrayList<String> tags = new ArrayList<String>();
+        ArrayList<String> tags = new ArrayList<>();
         System.out.println(PrintStatements.tag);
         System.out.println(PrintStatements.enterHowMany);
         int noOfTags = Input.getInteger();
@@ -257,10 +259,7 @@ public class AdminDriver implements Driver{
                 case 1:
                     System.out.println(PrintStatements.enterCategory);
                     Category category = new Category(Input.getString());
-                    if(Category.addCategory(category)){
-                        return true;
-                    }
-                    return false;
+                    return Category.addCategory(category);
                 case 2:
                     System.out.println(PrintStatements.selectFromOption);
                     for(int i=0;i< categoryDatabase.categories.size();i++){
@@ -347,11 +346,12 @@ public class AdminDriver implements Driver{
                 System.out.println(PrintStatements.noSuchThing);
                 System.out.println(PrintStatements.tryAgain);
                 int option = Input.getInteger();
-                if (option == 1) ;
-                else if (option == 2) return -1;
-                else {
-                    System.out.println(PrintStatements.inputError);
-                    System.out.println(PrintStatements.justTryAgain);
+                if (option != 1) {
+                    if (option == 2) return -1;
+                    else {
+                        System.out.println(PrintStatements.inputError);
+                        System.out.println(PrintStatements.justTryAgain);
+                    }
                 }
             } else {
                 if (subCategoryIndex != 0) break;
@@ -369,13 +369,16 @@ public class AdminDriver implements Driver{
                 System.out.println(PrintStatements.noSuchThing);
                 System.out.println(PrintStatements.tryAgain);
                 int option =Input.getInteger();
-                if(option == 1);
-                else if(option == 2) return -1;
-                else {
-                    System.out.println(PrintStatements.inputError);
-                    System.out.println(PrintStatements.justTryAgain);
+                switch (option) {
+                    case 1:
+                        break;
+                    case 2:
+                        return -1;
+                    default:
+                        System.out.println(PrintStatements.inputError);
+                        System.out.println(PrintStatements.justTryAgain);
+                        break;
                 }
-
             }
             else{
                 if(categoryIndex!=0)break;
@@ -541,13 +544,11 @@ public class AdminDriver implements Driver{
     private static void checkOrders(){
         order.printOrders();
         System.out.println(PrintStatements.selectFromOption);
-        System.out.println(PrintStatements.productHeader);
         order.printSpecificUserOrder(Input.getInteger());
     }
     private static void deliveryStatus(){
         order.readyOrders();
         System.out.println(PrintStatements.selectFromOption);
-        System.out.println(PrintStatements.productHeader);
         order.setReadyToDeliver(Input.getInteger());
     }
     private static void checkHistory(){

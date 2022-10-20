@@ -10,12 +10,12 @@ import utilities.PrintStatements;
 import java.util.ArrayList;
 
 public class UserDriver implements Driver {
-    static private UserDriver userObject = new UserDriver();
-    static private ProductsDatabase productsDatabase = ProductsDatabase.getInstance();
-    static private Order order = Order.getInstance();
-    static private Help help = Help.getInstance();
-    static private Announcement announcement = Announcement.getInstance();
-    static private PincodesDb pincodesDb = PincodesDb.getInstance();
+    static private final UserDriver userObject = new UserDriver();
+    static private final ProductsDatabase productsDatabase = ProductsDatabase.getInstance();
+    static private final Order order = Order.getInstance();
+    static private final Help help = Help.getInstance();
+    static private final Announcement announcement = Announcement.getInstance();
+    static private final PincodesDb pincodesDb = PincodesDb.getInstance();
     private UserDriver(){
     }
     static UserDriver getInstance(){

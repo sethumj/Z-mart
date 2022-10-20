@@ -51,8 +51,8 @@ public class PrintStatements {
     public static String productFullList = "Product id    Product name   quantity    MRP    Discount(%)    Discounted price    Category    Description";
     public static String signInError = "Oops!!! wrong credentials ";
     public static String justTryAgain = "Let's try one more time ";
-    public static String orderReady = "1.Ready\n2.Not ready";
-    public static String readyToDeliver = "1.Delivered\n2.Not Delivered";
+    public static String orderReady = "1.Ready\n2.Back";
+    public static String readyToDeliver = "1.Delivered\n2.Back";
     public static String tryAgain = "Wanna Try again enter 1 to return back press 2";
     public static String pressAny = "Press any key to place the order";
     public static String announcementMenu = "1.Add Announcement\n2.Remove Announcement\n3.View Announcements\n4.Back";

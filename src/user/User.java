@@ -10,19 +10,19 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class User {
-    private static ProductsDatabase productsDatabase = ProductsDatabase.getInstance();
-    private static UserDb userDb = UserDb.getInstance();
-    private static Order order = Order.getInstance();
-    private String name;
-    private long mobileNo;
-    private Address address;
+    private static final ProductsDatabase productsDatabase = ProductsDatabase.getInstance();
+    private static final UserDb userDb = UserDb.getInstance();
+    private static final Order order = Order.getInstance();
+    private final String name;
+    private final long mobileNo;
+    private final Address address;
     private boolean redeemed;
-    private String coupon = "WELCOME100";
+    private final String coupon = "WELCOME100";
     private float total;
     public static int orderId = 40000;
-    private static UserAuthentication userAuthentication = UserAuthentication.getInstance();
-    private  ArrayList<UserProduct> cart = new ArrayList<UserProduct>();
-    private ArrayList<ArrayList<UserProduct>> history = new ArrayList<>();
+    private static final UserAuthentication userAuthentication = UserAuthentication.getInstance();
+    private final ArrayList<UserProduct> cart = new ArrayList<UserProduct>();
+    private final ArrayList<ArrayList<UserProduct>> history = new ArrayList<>();
     User(String name,long mobileNo,Address address){
         this.name = name;
         this.mobileNo = mobileNo;
@@ -155,16 +155,10 @@ public class User {
         return true;
     }
     public boolean checkQuantity(int index,User user,int quantity){
-        if((user.cart.get(index).getQuantity() +quantity)>=0 && user.cart.get(index).getQuantity() +quantity<=Objects.requireNonNull(productsDatabase.getProduct(user.cart.get(index).getProductId())).getQuantity()){
-            return true;
-        }
-        return false;
+        return (user.cart.get(index).getQuantity() + quantity) >= 0 && user.cart.get(index).getQuantity() + quantity <= Objects.requireNonNull(productsDatabase.getProduct(user.cart.get(index).getProductId())).getQuantity();
     }
     public boolean checkNegativeQuantity(int index,User user,int quantity){
-        if((user.cart.get(index).getQuantity() -quantity)>=0 && user.cart.get(index).getQuantity() -quantity<=Objects.requireNonNull(productsDatabase.getProduct(user.cart.get(index).getProductId())).getQuantity()){
-            return true;
-        }
-        return false;
+        return (user.cart.get(index).getQuantity() - quantity) >= 0 && user.cart.get(index).getQuantity() - quantity <= Objects.requireNonNull(productsDatabase.getProduct(user.cart.get(index).getProductId())).getQuantity();
     }
     public boolean removeProduct(int index,User user){
         user.cart.remove(index);

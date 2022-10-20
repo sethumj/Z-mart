@@ -9,7 +9,7 @@ public class ProductsDatabase {
     static ProductsDatabase productsDatabase = new ProductsDatabase();
     public static ProductsDatabase getInstance(){return productsDatabase;}
     private ProductsDatabase(){}
-    public ArrayList<Product> products = new ArrayList<Product>();
+    public ArrayList<Product> products = new ArrayList<>();
     public  int productId = 1000;
     public boolean addToDb(Product product){
         productsDatabase.products.add(product);
@@ -18,7 +18,7 @@ public class ProductsDatabase {
     }
     public ArrayList<Integer> searchForProduct(String productName){
         int count = 1;
-        ArrayList<Integer> tempList = new ArrayList<Integer>();
+        ArrayList<Integer> tempList = new ArrayList<>();
         for(int i=0;i<productsDatabase.products.size();i++){
             for(int j=0;j<productsDatabase.products.get(i).getTags().size();j++){
                 if(productsDatabase.products.get(i).getTags().get(j).equals(productName)){

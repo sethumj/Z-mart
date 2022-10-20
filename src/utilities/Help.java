@@ -8,7 +8,7 @@ public class Help {
     public static Help getInstance(){
         return help;
     }
-    private  ArrayList<String> helpDb = new ArrayList<String>();
+    private final ArrayList<String> helpDb = new ArrayList<>();
     public boolean addHelp(String message){
         help.helpDb.add(message);
         return true;

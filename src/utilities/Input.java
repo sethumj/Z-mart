@@ -6,7 +6,7 @@ import java.util.Scanner;
 // Input class for get all types of input and all the errors in the input in this class itself
 
 public class Input {
-   private static Scanner sc = new Scanner(System.in);
+   private static final Scanner sc = new Scanner(System.in);
    private static boolean checkPreviousInt = false;
     public static int getInteger(){
         checkPreviousInt = true;

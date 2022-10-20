@@ -8,7 +8,7 @@ public class Announcement {
     public static Announcement getInstance(){
         return announcement;
     }
-    private final ArrayList<String> announcementDb = new ArrayList<String>();
+    private final ArrayList<String> announcementDb = new ArrayList<>();
     public boolean addAnnouncement(String message){
             announcement.announcementDb.add(message);
             return true;

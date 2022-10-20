@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Category {
     private final String categoryName;
-    private static CategoryDatabase categoryDatabase = CategoryDatabase.getInstance();
-    private ArrayList<String> subCategory = new ArrayList<String>();
+    private static final CategoryDatabase categoryDatabase = CategoryDatabase.getInstance();
+    private final ArrayList<String> subCategory = new ArrayList<>();
     public Category(String categoryName){
         this.categoryName = categoryName;
     }
