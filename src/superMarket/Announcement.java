@@ -3,17 +3,22 @@ package superMarket;
 import java.util.ArrayList;
 
 public class Announcement {
-    public static ArrayList<String> announcement = new ArrayList<String>();
-    public static boolean addAnnouncement(String message){
-        announcement.add(message);
-        return true;
+    private Announcement(){}
+    private static final Announcement announcement = new Announcement();
+    public static Announcement getInstance(){
+        return announcement;
     }
-    public static void viewAnnouncements(){
-        for(int i=0;i<announcement.size();i++) System.out.println(i+1+"."+announcement.get(i));
+    private final ArrayList<String> announcementDb = new ArrayList<String>();
+    public boolean addAnnouncement(String message){
+            announcement.announcementDb.add(message);
+            return true;
     }
-    public static boolean removeAnnouncement(int index){
-        if(index>announcement.size()) return false;
-        announcement.remove(index-1);
+    public void viewAnnouncements(){
+        for(int i=0;i<announcement.announcementDb.size();i++) System.out.println(i+1+"."+announcement.announcementDb.get(i));
+    }
+    public boolean removeAnnouncement(int index){
+        if(index>announcement.announcementDb.size()) return false;
+        announcement.announcementDb.remove(index-1);
         return true;
     }
 }

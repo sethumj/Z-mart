@@ -12,18 +12,19 @@ public class Order {
     public static Order getInstance(){
         return order;
     }
-    private static ProductsDatabase productsDatabase = ProductsDatabase.getInstance();
-private ArrayList<ArrayList<UserProduct>> orders = new ArrayList<ArrayList<UserProduct>>();
-private  ArrayList<ArrayList<UserProduct>> readyToDeliver = new ArrayList<ArrayList<UserProduct>>();
-private  ArrayList<ArrayList<UserProduct>> history = new ArrayList<ArrayList<UserProduct>>();
+    private static final ProductsDatabase productsDatabase = ProductsDatabase.getInstance();
+    private final ArrayList<ArrayList<UserProduct>> orders = new ArrayList<ArrayList<UserProduct>>();
+    private final ArrayList<ArrayList<UserProduct>> readyToDeliver = new ArrayList<ArrayList<UserProduct>>();
+    private final ArrayList<ArrayList<UserProduct>> history = new ArrayList<ArrayList<UserProduct>>();
 
     public ArrayList<ArrayList<UserProduct>> getOrders() {
         return order.orders;
     }
     public void printOrders(){
+        System.out.println(PrintStatements.orderHeader);
         for(int i=0;i<order.orders.size();i++){
             for(int j=0;j<order.orders.get(i).size();j++){
-                System.out.println(i+1+"."+order.orders.get(i).get(j).name+"          "+order.orders.get(i).get(j).mobileNo);
+                System.out.println(i+1+"."+order.orders.get(i).get(j).getOrderId()+"          "+ order.orders.get(i).get(j).getName() +"          "+ order.orders.get(i).get(j).getMobileNo());
                 break;
             }
         }
@@ -31,7 +32,7 @@ private  ArrayList<ArrayList<UserProduct>> history = new ArrayList<ArrayList<Use
     public void decreaseProductDatabase(){
         for(int i = 0;i<order.orders.size();i++){
             for(int j=0;j<order.orders.get(i).size();j++){
-                order.decreaseProductQuantity(order.orders.get(i).get(j).productId,order.orders.get(i).get(j).quantity);
+                order.decreaseProductQuantity(order.orders.get(i).get(j).getProductId(), order.orders.get(i).get(j).getQuantity());
             }
         }
     }
@@ -43,8 +44,8 @@ private  ArrayList<ArrayList<UserProduct>> history = new ArrayList<ArrayList<Use
         }
     }
     public void increaseProductDatabase(ArrayList<UserProduct> orders){
-        for(int i = 0;i<orders.size();i++){
-                order.increaseProductQuantity(orders.get(i).productId,orders.get(i).quantity);
+        for (UserProduct userProduct : orders) {
+            order.increaseProductQuantity(userProduct.getProductId(), userProduct.getQuantity());
         }
     }
     public void increaseProductQuantity(int productId,int quantity){
@@ -58,7 +59,7 @@ private  ArrayList<ArrayList<UserProduct>> history = new ArrayList<ArrayList<Use
     public void printSpecificUserOrder(int index){
         if(index-1<order.orders.size()) {
             for (int i = 0; i < order.orders.get(index - 1).size();i++){
-                System.out.println(i+1+"."+order.orders.get(index-1).get(i).productId+"       "+order.orders.get(index-1).get(i).productName+"     "+order.orders.get(index-1).get(i).quantity+"     "+order.orders.get(index-1).get(i).discountedPrice*order.orders.get(index-1).get(i).quantity);
+                System.out.println(i+1+"."+ order.orders.get(index - 1).get(i).getProductId() +"       "+ order.orders.get(index - 1).get(i).getProductName() +"     "+ order.orders.get(index - 1).get(i).getQuantity() +"     "+ order.orders.get(index - 1).get(i).getDiscountedPrice() * order.orders.get(index - 1).get(i).getQuantity());
             }
             while(true) {
                 System.out.println(PrintStatements.orderReady);
@@ -78,9 +79,10 @@ private  ArrayList<ArrayList<UserProduct>> history = new ArrayList<ArrayList<Use
         }
     }
     public void readyOrders(){
+        System.out.println(PrintStatements.orderHeader);
         for(int i=0;i<order.readyToDeliver.size();i++){
             for(int j=0;j<order.readyToDeliver.get(i).size();j++){
-                System.out.println(i+1+"."+order.readyToDeliver.get(i).get(j).name+"          "+order.readyToDeliver.get(i).get(j).mobileNo);
+                System.out.println(i+1+"."+order.readyToDeliver.get(i).get(j).getOrderId()+"         " +order.readyToDeliver.get(i).get(j).getName() +"          "+ order.readyToDeliver.get(i).get(j).getMobileNo());
                 break;
             }
         }
@@ -88,7 +90,7 @@ private  ArrayList<ArrayList<UserProduct>> history = new ArrayList<ArrayList<Use
     public void setReadyToDeliver(int index){
         if(index-1<order.readyToDeliver.size()) {
             for (int i = 0; i < order.readyToDeliver.get(index - 1).size();i++){
-                System.out.println(i+1+"."+order.readyToDeliver.get(index-1).get(i).productId+"       "+order.readyToDeliver.get(index-1).get(i).productName+"     "+order.readyToDeliver.get(index-1).get(i).quantity+"     "+order.readyToDeliver.get(index-1).get(i).discountedPrice*order.readyToDeliver.get(index-1).get(i).quantity);
+                System.out.println(i+1+"."+ order.readyToDeliver.get(index - 1).get(i).getProductId() +"       "+ order.readyToDeliver.get(index - 1).get(i).getProductName() +"     "+ order.readyToDeliver.get(index - 1).get(i).getQuantity() +"     "+ order.readyToDeliver.get(index - 1).get(i).getDiscountedPrice() * order.readyToDeliver.get(index - 1).get(i).getQuantity());
             }
             while(true) {
                 System.out.println(PrintStatements.readyToDeliver);
@@ -108,11 +110,12 @@ private  ArrayList<ArrayList<UserProduct>> history = new ArrayList<ArrayList<Use
         }
     }
     public void history(){
+        System.out.println(PrintStatements.orderHeader);
         for(int i = 0 ;i<order.history.size();i++){
             int total = 0;
-            System.out.print(order.history.get(i).get(0).name+"          "+order.history.get(i).get(0).mobileNo+"          ");
+            System.out.print(order.history.get(i).get(0).getOrderId()+"        "+order.history.get(i).get(0).getName() +"          "+ order.history.get(i).get(0).getMobileNo() +"          ");
             for(int j = 0;j<order.history.get(i).size();j++){
-                total+=order.history.get(i).get(j).discountedPrice*order.history.get(i).get(j).quantity;
+                total+= order.history.get(i).get(j).getDiscountedPrice() * order.history.get(i).get(j).getQuantity();
             }
             System.out.println(PrintStatements.revenueGenerated+total);
         }

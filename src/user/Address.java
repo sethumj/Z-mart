@@ -18,6 +18,7 @@ public class Address {
         this.district = district;
         this.pincode = pincode;
     }
+    private static PincodesDb pincodesDb = PincodesDb.getInstance();
     public static Address getAddress(){
         System.out.println(PrintStatements.getAddress);
         System.out.println(PrintStatements.addressHouseNo);
@@ -32,7 +33,7 @@ public class Address {
         int pincode;
         while(true) {
             pincode =Input.getInteger();
-            if (PincodesDb.checkPincode(pincode)) {
+            if (pincodesDb.checkPincode(pincode)) {
                 break;
             } else {
                 System.out.println(PrintStatements.notServiceable);

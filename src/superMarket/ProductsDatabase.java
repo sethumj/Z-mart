@@ -11,7 +11,7 @@ public class ProductsDatabase {
     private ProductsDatabase(){}
     public ArrayList<Product> products = new ArrayList<Product>();
     public  int productId = 1000;
-    public static boolean addToDb(Product product){
+    public boolean addToDb(Product product){
         productsDatabase.products.add(product);
         productsDatabase.productId++;
         return true;
@@ -35,7 +35,7 @@ public class ProductsDatabase {
         System.out.println(PrintStatements.productDetails);
         for(int i=0;i<productsDatabase.products.size();i++){
             if(productId == productsDatabase.products.get(i).getProductId()){
-                System.out.println(productsDatabase.products.get(i).getProductName()+"  "+productsDatabase.products.get(i).getQuantity()+"      "+productsDatabase.products.get(i).getMrp()+"       "+productsDatabase.products.get(i).getDiscount()+"              "+productsDatabase.products.get(i).getDiscountedPrice()+"           "+productsDatabase.products.get(i).getCategory()+"          "+productsDatabase.products.get(i).getDescription());
+                System.out.println(productsDatabase.products.get(i).getProductName()+"  "+productsDatabase.products.get(i).getQuantity()+"      "+productsDatabase.products.get(i).getMrp()+"       "+productsDatabase.products.get(i).getDiscount()+"              "+productsDatabase.products.get(i).getDiscountedPrice()+"           "+productsDatabase.products.get(i).getSubCategoryName()+"          "+productsDatabase.products.get(i).getDescription());
                 return;
             }
         }

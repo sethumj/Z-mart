@@ -13,6 +13,9 @@ public class UserDriver implements Driver {
     static private UserDriver userObject = new UserDriver();
     static private ProductsDatabase productsDatabase = ProductsDatabase.getInstance();
     static private Order order = Order.getInstance();
+    static private Help help = Help.getInstance();
+    static private Announcement announcement = Announcement.getInstance();
+    static private PincodesDb pincodesDb = PincodesDb.getInstance();
     private UserDriver(){
     }
     static UserDriver getInstance(){
@@ -22,7 +25,7 @@ public class UserDriver implements Driver {
     @Override
     public void startDriver() {
         System.out.println(PrintStatements.enterPincode);
-        if(PincodesDb.checkPincode(Input.getInteger())){
+        if(pincodesDb.checkPincode(Input.getInteger())){
             System.out.println(PrintStatements.signMenu);
             switch(Input.getInteger()){
                 case 1:
@@ -50,28 +53,37 @@ public class UserDriver implements Driver {
         }
     }
     private static void goToMenu(User user){
+        System.out.println();
+        System.out.println(PrintStatements.greeting);
+        System.out.println();
         while(true){
             System.out.println(PrintStatements.userOptions);
             switch(Input.getInteger()){
                 case 1:
                     UserDriver.searchForProduct(user);
+                    System.out.println();
                     break;
                 case 2:
                     UserDriver.searchByCategory(user);
+                    System.out.println();
                     break;
                 case 3:
+                    System.out.println(PrintStatements.underDevelopment);
                     break;
                 case 4:
                     UserDriver.goToCart(user);
+                    System.out.println();
                     break;
                 case 5:
                     UserDriver.viewOrders(user);
+                    System.out.println();
                     break;
                 case 6:
-                    Announcement.viewAnnouncements();
+                    announcement.viewAnnouncements();
+                    System.out.println();
                     break;
                 case 7:
-                    Help.viewHelps();
+                    help.viewHelps();
                     break;
                 case 8:
                     System.out.println(PrintStatements.aboutUs);
@@ -137,7 +149,7 @@ public class UserDriver implements Driver {
                         System.out.println(PrintStatements.noItemInCart);
                         return;
                     }
-                    System.out.println(PrintStatements.doYouHaveACoupon);
+                    /*System.out.println(PrintStatements.doYouHaveACoupon);
                     int choice =  Input.getInteger();
                     if(choice == 1) {
                         here:
@@ -165,7 +177,7 @@ public class UserDriver implements Driver {
                             }
                         }
                     }
-                    else if(choice == 2) {
+                    else if(choice == 2) {*/
                         System.out.println(PrintStatements.afterCoupon + user.getOrderTotal(user));
                         System.out.println(PrintStatements.pressAny);
                         Input.getString();
@@ -174,12 +186,11 @@ public class UserDriver implements Driver {
                         order.decreaseProductDatabase();
                         user.clearCart(user);
                         return;
-                    }
+                  /*  }
                     else{
                         System.out.println(PrintStatements.inputError);
                     }
-
-                    break;
+                    break;*/
                 case 3:
                     return;
                 default:
@@ -191,7 +202,7 @@ public class UserDriver implements Driver {
 
     }
     private static void searchByCategory(User user){
-        String categoryName = CategoryDatabase.printByCategory();
+        String categoryName = AdminDriver.printByCategory();
         search(categoryName,user);
     }
     private static void search(String productName,User user){
@@ -267,6 +278,7 @@ public class UserDriver implements Driver {
         }
     }
     private static void viewOrders(User user){
+        System.out.println(PrintStatements.placedOrderHeader);
         user.viewHistory(user);
         System.out.println(PrintStatements.cancelOrderMenu);
         switch(Input.getInteger()){

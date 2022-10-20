@@ -1,12 +1,14 @@
 package utilities;
 
 public class PrintStatements {
-    public static String greeting = "Welcome to ";
+    public static String greeting = "Welcome to Z-mart";
     public static String nameOfSupermarket = "Enter your Super Market name : ";
     public static String adminOptions = "1.Add Product\n2.Update Product\n3.Remove Product\n4.Add Category\n5.Remove Category\n6.Check Stock\n7.Check Orders\n8.Ready to Deliver\n9.History\n10.Pin-codes\n11.Help\n12.Announcement\n13.About Us\n14.Sign-out";
     public static String userOptions = "1.Search for a Product\n2.Categories\n3.Offer zone\n4.Go to cart\n5.Orders\n6.Check announcement\n7.Help\n8.About us\n9.Sign out";
     public static String mainOptions = "1.Admin\n2.User\n3.Exit";
     public static String enterEmail = "Enter your E-mail id : ";
+    public static String productHeader = "Product-id   Product name    Quantity   Total";
+    public static String checkStockProduct = "Product-id   Product name   Quantity";
     public static String categoryRemoveMenu = "1.Remove category\n2.Remove sub-category\n3.back";
     public static String enterPincode = "Enter Pincode : ";
     public static String previousPincodes = "Already existing Pincodes are :";
@@ -26,7 +28,7 @@ public class PrintStatements {
     public static String enterCategory = "Enter the category  : ";
     public static String enterTag = "Enter your tag : ";
     public static String tag = "Tags(Used for user search)";
-    public static String byCategory = "1.Category\n2.Product id\n3.Back";
+    public static String byCategory = "1.Category\n2.Product id\n3.Print all Products\n4.Back";
     public static String selectFromOption = "Select one from the options";
     public static String tagMenu = "1.Add tag\n2.remove tag\n3.Go back";
     public static String updateProductMenu = "Do you wanna update?\n1.Product name\n2.Product quantity\n3.Product MRP\n4.Product discount\n5.Product category\n6.Product description\n7.Update tags\n8.Go back";
@@ -88,12 +90,15 @@ public class PrintStatements {
     public static String noItemInCart = "There is no item in the cart";
     public static String revenueGenerated = "Revenue Generated : ₹";
     public static String doYouHaveACoupon = "Do You have Coupon code \n1.Yes\n2.No";
-    public static String productDetails = "Product name   quantity    MRP    Discount(%)    Discounted price    Category    Description ";
+    public static String productDetails = "Product name   quantity    MRP    Discount(%)    Discounted price     Category              Description ";
+    public static String orderHeader = "Order-id     Name            MobileNo";
     public static String thankYou = "Thank you for shopping i am expecting to see you again in a while!";
+    public static String underDevelopment = "This section is under development";
     public static String viewCart = "Your Cart!!!";
     public static String orderPlaced = "Your Order is Placed!!!";
     public static String cancelOrderMenu = "1.Cancel\n2.Back";
     public static String cancelled = "Your order cancelled successfully";
+    public static String placedOrderHeader = "Order-id     Total amount";
     public static String signMenu = "1.Sign up\n2.Sign in\n3.Back";
 
 

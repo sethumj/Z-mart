@@ -11,24 +11,27 @@ import java.util.Objects;
 
 public class User {
     private static ProductsDatabase productsDatabase = ProductsDatabase.getInstance();
+    private static UserDb userDb = UserDb.getInstance();
     private static Order order = Order.getInstance();
     private String name;
     private long mobileNo;
     private Address address;
-    private String password;
     private boolean redeemed;
     private String coupon = "WELCOME100";
     private float total;
     public static int orderId = 40000;
+    private static UserAuthentication userAuthentication = UserAuthentication.getInstance();
     private  ArrayList<UserProduct> cart = new ArrayList<UserProduct>();
     private ArrayList<ArrayList<UserProduct>> history = new ArrayList<>();
-    User(String name,long mobileNo,Address address,String password){
+    User(String name,long mobileNo,Address address){
         this.name = name;
         this.mobileNo = mobileNo;
         this.address = address;
-        this.password = password;
         this.redeemed = false;
         this.total = 0;
+    }
+    public String getName(){
+        return name;
     }
     public static User signUp(){
         System.out.println(PrintStatements.getName);
@@ -38,7 +41,7 @@ public class User {
             System.out.println(PrintStatements.getMobileNumber);
             mobileNo = Input.getLong();
             if(Validation.checkMobileNo(mobileNo)){
-                if(User.checkDb(mobileNo)){
+                if(userAuthentication.checkAlreadyExist(mobileNo)){
                     System.out.println(PrintStatements.accountAlreadyExist);
                     switch(Input.getInteger()){
                         case 1:
@@ -70,7 +73,8 @@ public class User {
                 System.out.println(PrintStatements.passwordMismatch);
             }
         }
-        return UserDb.addUser(new User(name,mobileNo,address,password));
+        userAuthentication.addUser(mobileNo,password);
+        return UserDb.addUser(new User(name,mobileNo,address));
 
     }
     public static User signIn(){
@@ -79,9 +83,10 @@ public class User {
             long mobileNo = Input.getLong();
             System.out.println(PrintStatements.enterPassword);
             String password = Input.getString();
-            for(int i =0;i<UserDb.users.size();i++){
-                if(UserDb.users.get(i).mobileNo == mobileNo && UserDb.users.get(i).password.equals(password)){
-                    return UserDb.users.get(i);
+            if(!userAuthentication.userCheck(mobileNo,password)) return null;
+            for(int i =0;i<userDb.users.size();i++){
+                if(userDb.users.get(i).mobileNo == mobileNo){
+                    return userDb.users.get(i);
                 }
             }
             System.out.println(PrintStatements.signInError);
@@ -98,8 +103,8 @@ public class User {
         }
     }
     private static boolean checkDb(long mobileNo){
-        for(int i =0;i<UserDb.users.size();i++){
-            if(UserDb.users.get(i).mobileNo == mobileNo) return true;
+        for(int i =0;i<userDb.users.size();i++){
+            if(userDb.users.get(i).mobileNo == mobileNo) return true;
         }
         return false;
     }
@@ -111,11 +116,11 @@ public class User {
         float total = 0;
         int i=1;
         for (UserProduct userProduct : cart) {
-            System.out.print(i+"."+userProduct.productName + "         ");
-            System.out.print(userProduct.quantity + "         " );
-            System.out.print(userProduct.discountedPrice*userProduct.quantity);
+            System.out.print(i+"."+ userProduct.getProductName() + "         ");
+            System.out.print(userProduct.getQuantity() + "         " );
+            System.out.print(userProduct.getDiscountedPrice() * userProduct.getQuantity());
             System.out.println();
-            total+=userProduct.discountedPrice*userProduct.quantity;
+            total+= userProduct.getDiscountedPrice() * userProduct.getQuantity();
             i++;
         }
         System.out.println(PrintStatements.totalAmount+total);
@@ -126,7 +131,7 @@ public class User {
     }
     public boolean checkPresentInCart(int productId,User user){
         for(int i=0;i<user.cart.size();i++){
-            if(user.cart.get(i).productId == productId){
+            if(user.cart.get(i).getProductId() == productId){
                 return true;
             }
         }
@@ -134,29 +139,29 @@ public class User {
     }
     public boolean updateCart(int productId,User user,int quantity){
         for(int i=0;i<user.cart.size();i++){
-            if(user.cart.get(i).productId == productId){
-                if(user.cart.get(i).quantity+quantity> Objects.requireNonNull(productsDatabase.getProduct(productId)).getQuantity()){
+            if(user.cart.get(i).getProductId() == productId){
+                if(user.cart.get(i).getQuantity() +quantity> Objects.requireNonNull(productsDatabase.getProduct(productId)).getQuantity()){
                     return false;
                 }
-                user.cart.get(i).quantity+=quantity;
+                user.cart.get(i).setQuantity(user.cart.get(i).getQuantity()+quantity);
                 return true;
             }
         }
         return false;
     }
     public boolean changeQuantity(int index,User user,int quantity){
-        user.cart.get(index).quantity+=quantity;
+        user.cart.get(index).setQuantity(user.cart.get(index).getQuantity()+quantity);
 
         return true;
     }
     public boolean checkQuantity(int index,User user,int quantity){
-        if((user.cart.get(index).quantity+quantity)>=0 && user.cart.get(index).quantity+quantity<=Objects.requireNonNull(productsDatabase.getProduct(user.cart.get(index).productId)).getQuantity()){
+        if((user.cart.get(index).getQuantity() +quantity)>=0 && user.cart.get(index).getQuantity() +quantity<=Objects.requireNonNull(productsDatabase.getProduct(user.cart.get(index).getProductId())).getQuantity()){
             return true;
         }
         return false;
     }
     public boolean checkNegativeQuantity(int index,User user,int quantity){
-        if((user.cart.get(index).quantity-quantity)>=0 && user.cart.get(index).quantity-quantity<=Objects.requireNonNull(productsDatabase.getProduct(user.cart.get(index).productId)).getQuantity()){
+        if((user.cart.get(index).getQuantity() -quantity)>=0 && user.cart.get(index).getQuantity() -quantity<=Objects.requireNonNull(productsDatabase.getProduct(user.cart.get(index).getProductId())).getQuantity()){
             return true;
         }
         return false;
@@ -209,7 +214,7 @@ public class User {
         int count=1;
         for(int i=0;i<user.history.size();i++){
             for(int j=0;j<user.history.get(i).size();) {
-                System.out.println(count+ "." + user.history.get(i).get(j).orderId + "     " + getTotal(i,user));
+                System.out.println(count+ "." + user.history.get(i).get(j).getOrderId() + "     " + getTotal(i,user));
                 count++;
                 break;
             }
@@ -218,7 +223,7 @@ public class User {
     public float getTotal(int index,User user){
         float total=0;
         for(int i=0;i<user.history.get(index).size();i++){
-            total+=user.history.get(index).get(i).discountedPrice*user.history.get(index).get(i).quantity;
+            total+= user.history.get(index).get(i).getDiscountedPrice() * user.history.get(index).get(i).getQuantity();
         }
         return total;
     }
@@ -228,7 +233,7 @@ public class User {
     public boolean cancelOrder(User user,int orderId){
         for(int i=0;i<user.history.size();i++) {
             for (int j = 0; j < user.history.get(i).size(); ) {
-                if(user.history.get(i).get(j).orderId == orderId){
+                if(user.history.get(i).get(j).getOrderId() == orderId){
                     if(user.cancelFromDb(user,orderId)) {
                         order.increaseProductDatabase(user.history.get(i));
                         user.history.remove(i);
@@ -246,7 +251,7 @@ public class User {
     public boolean cancelFromDb(User user,int orderId){
         for(int i=0;i<order.getOrders().size();i++){
             for(int j=0;j<order.getOrders().get(i).size();j++) {
-                if(order.getOrders().get(i).get(j).orderId == orderId){
+                if(order.getOrders().get(i).get(j).getOrderId() == orderId){
                     order.getOrders().remove(i);
                     return true;
                 }

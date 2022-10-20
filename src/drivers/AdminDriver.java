@@ -12,7 +12,11 @@ import java.util.ArrayList;
 public class AdminDriver implements Driver{
     static AdminDriver adminObject = new AdminDriver();
     static Order order = Order.getInstance();
-    private static ProductsDatabase productsDatabase = ProductsDatabase.getInstance();
+    private static final CategoryDatabase categoryDatabase = CategoryDatabase.getInstance();
+    private static final ProductsDatabase productsDatabase = ProductsDatabase.getInstance();
+    private static final Help help = Help.getInstance();
+    private static final Announcement announcement = Announcement.getInstance();
+    private static final PincodesDb pincodesDb = PincodesDb.getInstance();
     private AdminDriver(){
     }
 
@@ -135,7 +139,7 @@ public class AdminDriver implements Driver{
         AdminDriver.printSubCategory(categoryIndex);
         int subCategoryIndex = AdminDriver.getSubCategory(categoryIndex);
         if(subCategoryIndex == -1) return false;
-        String category = CategoryDatabase.categories.get(categoryIndex-1).getSubCategory().get(subCategoryIndex-1);
+        String subCategoryName = categoryDatabase.categories.get(categoryIndex-1).getSubCategory().get(subCategoryIndex-1);
         ArrayList<String> tags = new ArrayList<String>();
         System.out.println(PrintStatements.tag);
         System.out.println(PrintStatements.enterHowMany);
@@ -152,7 +156,7 @@ public class AdminDriver implements Driver{
             else if(confirm == 2) return false;
             else System.out.println(PrintStatements.inputError);
         }
-        Product product = new Product(productName,quantity,mrp,discount,category,tags,description,productsDatabase.productId,CategoryDatabase.categories.get(categoryIndex-1).getCategoryName());
+        Product product = new Product(productName,quantity,mrp,discount,categoryDatabase.categories.get(categoryIndex-1).getCategoryName(),subCategoryName,tags,description,productsDatabase.productId);
         return productsDatabase.addToDb(product);
     }
     private static boolean updateProduct(){
@@ -162,7 +166,7 @@ public class AdminDriver implements Driver{
         for(int i=0;i<productsDatabase.products.size();i++){
             if(productsDatabase.products.get(i).getProductId() == productId){
                 System.out.println(PrintStatements.previousDetails);
-                System.out.println(productsDatabase.products.get(i).getProductId()+"       "+productsDatabase.products.get(i).getProductName()+"       "+productsDatabase.products.get(i).getQuantity()+"       "+productsDatabase.products.get(i).getMrp()+"       "+productsDatabase.products.get(i).getDiscount()+"       "+productsDatabase.products.get(i).getDiscountedPrice()+"       "+productsDatabase.products.get(i).getCategory()+"       "+productsDatabase.products.get(i).getDescription());
+                System.out.println(productsDatabase.products.get(i).getProductId()+"       "+productsDatabase.products.get(i).getProductName()+"       "+productsDatabase.products.get(i).getQuantity()+"       "+productsDatabase.products.get(i).getMrp()+"       "+productsDatabase.products.get(i).getDiscount()+"       "+productsDatabase.products.get(i).getDiscountedPrice()+"       "+productsDatabase.products.get(i).getSubCategoryName()+"       "+productsDatabase.products.get(i).getDescription());
                 System.out.println(PrintStatements.tag);
                 for(int j = 1;j<=productsDatabase.products.get(i).getTags().size();j++){
                     System.out.println(j+"."+productsDatabase.products.get(i).getTags().get(j-1));
@@ -195,7 +199,7 @@ public class AdminDriver implements Driver{
                             break;
                         case 5:
                             System.out.println(PrintStatements.enterCategory);
-                            productsDatabase.products.get(i).setCategory(Input.getString());
+                            productsDatabase.products.get(i).setSubCategoryName(Input.getString());
                             modificationCount++;
                             break;
                         case 6:
@@ -259,20 +263,20 @@ public class AdminDriver implements Driver{
                     return false;
                 case 2:
                     System.out.println(PrintStatements.selectFromOption);
-                    for(int i=0;i< CategoryDatabase.categories.size();i++){
-                        System.out.println(i+1+"."+CategoryDatabase.categories.get(i).getCategoryName());
+                    for(int i=0;i< categoryDatabase.categories.size();i++){
+                        System.out.println(i+1+"."+categoryDatabase.categories.get(i).getCategoryName());
                     }
                     int index;
                     while(true) {
                         index = Input.getInteger();
-                        if(index<=CategoryDatabase.categories.size()) break;
+                        if(index<=categoryDatabase.categories.size()) break;
                         else{
                             System.out.println(PrintStatements.noSuchThing);
                             System.out.println(PrintStatements.justTryAgain);
                         }
                     }
                     System.out.println(PrintStatements.enterCategory);
-                    CategoryDatabase.categories.get(index-1).getSubCategory().add(Input.getString());
+                    categoryDatabase.categories.get(index-1).getSubCategory().add(Input.getString());
                     return true;
                 case 3:
                     return false;
@@ -284,7 +288,7 @@ public class AdminDriver implements Driver{
         }
 
     }
-    public static void checkStock(){
+    private static void checkStock(){
         if(productsDatabase.products.size() == 0) {
             System.out.println(PrintStatements.noProductsAvailable);
             return;
@@ -296,7 +300,7 @@ public class AdminDriver implements Driver{
             int categoryIndex = AdminDriver.getCategory();
             AdminDriver.printSubCategory(categoryIndex);
             int subCategoryIndex = AdminDriver.getSubCategory(categoryIndex);
-            String subCategory = CategoryDatabase.categories.get(categoryIndex-1).getSubCategory().get(subCategoryIndex-1);
+            String subCategory = categoryDatabase.categories.get(categoryIndex-1).getSubCategory().get(subCategoryIndex-1);
             AdminDriver.printStockByCategory(subCategory);
         }
         else if(option == 2){
@@ -304,8 +308,18 @@ public class AdminDriver implements Driver{
             AdminDriver.printStockByProductId(productId);
         }
         else if(option == 3){
+            AdminDriver.printAllProducts();
+        }
+        else if(option == 4){
             return;
         }
+    }
+    public static String printByCategory() {
+        AdminDriver.printCategory();
+        int categoryIndex = AdminDriver.getCategory();
+        AdminDriver.printSubCategory(categoryIndex);
+        int subCategoryIndex = AdminDriver.getSubCategory(categoryIndex);
+        return categoryDatabase.categories.get(categoryIndex - 1).getSubCategory().get(subCategoryIndex - 1);
     }
     private static boolean removeProduct(){
         System.out.println(PrintStatements.enterProductId);
@@ -329,7 +343,7 @@ public class AdminDriver implements Driver{
         int subCategoryIndex;
         while (true) {
             subCategoryIndex = Input.getInteger();
-            if (subCategoryIndex > CategoryDatabase.categories.get(categoryIndex - 1).getSubCategory().size() && subCategoryIndex != 0) {
+            if (subCategoryIndex > categoryDatabase.categories.get(categoryIndex - 1).getSubCategory().size() && subCategoryIndex != 0) {
                 System.out.println(PrintStatements.noSuchThing);
                 System.out.println(PrintStatements.tryAgain);
                 int option = Input.getInteger();
@@ -351,7 +365,7 @@ public class AdminDriver implements Driver{
         int categoryIndex;
         while(true){
             categoryIndex = Input.getInteger();
-            if(categoryIndex>CategoryDatabase.categories.size() && categoryIndex!=0){
+            if(categoryIndex>categoryDatabase.categories.size() && categoryIndex!=0){
                 System.out.println(PrintStatements.noSuchThing);
                 System.out.println(PrintStatements.tryAgain);
                 int option =Input.getInteger();
@@ -372,20 +386,20 @@ public class AdminDriver implements Driver{
         return categoryIndex;
     }
     public static void printCategory(){
-        for(int c =0;c<CategoryDatabase.categories.size();c++){
-            System.out.println(c+1+"."+CategoryDatabase.categories.get(c).getCategoryName());
+        for(int c =0;c<categoryDatabase.categories.size();c++){
+            System.out.println(c+1+"."+categoryDatabase.categories.get(c).getCategoryName());
         }
     }
     public static void printSubCategory(int categoryIndex){
-        for(int sc = 0;sc<CategoryDatabase.categories.get(categoryIndex-1).getSubCategory().size();sc++){
-            System.out.println(sc+1+"."+CategoryDatabase.categories.get(categoryIndex-1).getSubCategory().get(sc));
+        for(int sc = 0;sc<categoryDatabase.categories.get(categoryIndex-1).getSubCategory().size();sc++){
+            System.out.println(sc+1+"."+categoryDatabase.categories.get(categoryIndex-1).getSubCategory().get(sc));
         }
     }
     public static void printStockByCategory(String categoryName){
         int count = 1;
         System.out.println(PrintStatements.checkStock);
         for(int i=0;i<productsDatabase.products.size();i++){
-            if(productsDatabase.products.get(i).getCategory().equals(categoryName))System.out.println(count+"."+productsDatabase.products.get(i).getProductId()+"             "+productsDatabase.products.get(i).getProductName()+"               "+productsDatabase.products.get(i).getQuantity());
+            if(productsDatabase.products.get(i).getSubCategoryName().equals(categoryName))System.out.println(count+"."+productsDatabase.products.get(i).getProductId()+"             "+productsDatabase.products.get(i).getProductName()+"               "+productsDatabase.products.get(i).getQuantity());
         }
     }
     private static void printStockByProductId(int productId){
@@ -397,14 +411,14 @@ public class AdminDriver implements Driver{
         }
     }
     private static boolean addPincodes(){
-       if(PincodesDb.pincodes.size()>0) System.out.println(PrintStatements.previousPincodes);
-        for(int i = 0;i<PincodesDb.pincodes.size();i++){
-            System.out.println(i+1+"."+PincodesDb.pincodes.get(i));
+       if(pincodesDb.getPincodes().size()>0) System.out.println(PrintStatements.previousPincodes);
+       for(int i = 0; i< pincodesDb.getPincodes().size(); i++){
+            System.out.println(i+1+"."+ pincodesDb.getPincodes().get(i));
         }
         System.out.println(PrintStatements.enterHowMany);
         int total = Input.getInteger();
         for(int i = 0;i<total;i++){
-            PincodesDb.addPincode(Input.getInteger());
+            pincodesDb.addPincode(Input.getInteger());
         }
         return total>0;
     }
@@ -418,9 +432,9 @@ public class AdminDriver implements Driver{
         else if(option == 2 ){
             System.out.println(PrintStatements.enterPincode);
             int removePin = Input.getInteger();
-            for(int i = 0;i<PincodesDb.pincodes.size();i++){
-                if(removePin == PincodesDb.pincodes.get(i)){
-                    PincodesDb.pincodes.remove(i);
+            for(int i = 0; i< pincodesDb.getPincodes().size(); i++){
+                if(removePin == pincodesDb.getPincodes().get(i)){
+                    pincodesDb.getPincodes().remove(i);
                     System.out.println(PrintStatements.updateSuccessful);
                     return;
                 }
@@ -438,17 +452,17 @@ public class AdminDriver implements Driver{
             switch(Input.getInteger()){
                 case 1:
                     System.out.println(PrintStatements.enterText);
-                    if(Help.addHelp(Input.getString())) System.out.println(PrintStatements.updateSuccessful);
+                    if(help.addHelp(Input.getString())) System.out.println(PrintStatements.updateSuccessful);
                     else System.out.println(PrintStatements.updateFailed);
                     break;
                 case 2:
                     System.out.println(PrintStatements.selectFromOption);
-                    Help.viewHelps();
-                    if(Help.removeHelp((Input.getInteger()))) System.out.println(PrintStatements.updateSuccessful);
+                    help.viewHelps();
+                    if(help.removeHelp((Input.getInteger()))) System.out.println(PrintStatements.updateSuccessful);
                     else System.out.println(PrintStatements.updateFailed);
                     break;
                 case 3:
-                    Help.viewHelps();
+                    help.viewHelps();
                     break;
                 case 4: return;
                 default :
@@ -479,19 +493,17 @@ public class AdminDriver implements Driver{
 
         }
     }
-    private static boolean removeSubCategory(){
+    private static void removeSubCategory(){
         AdminDriver.printCategory();
         int categoryIndex = AdminDriver.getCategory();
         AdminDriver.printSubCategory(categoryIndex);
         int subCategoryIndex = AdminDriver.getSubCategory(categoryIndex);
-        CategoryDatabase.categories.get(categoryIndex-1).getSubCategory().remove(subCategoryIndex-1);
-        return true;
+        categoryDatabase.categories.get(categoryIndex-1).getSubCategory().remove(subCategoryIndex-1);
     }
-    private static boolean removeMainCategory(){
+    private static void removeMainCategory(){
         AdminDriver.printCategory();
         int categoryIndex = AdminDriver.getCategory();
-        CategoryDatabase.categories.remove(categoryIndex-1);
-        return true;
+        categoryDatabase.categories.remove(categoryIndex-1);
     }
     private static void announcement(){
         while(true) {
@@ -499,17 +511,17 @@ public class AdminDriver implements Driver{
             switch(Input.getInteger()){
                 case 1:
                     System.out.println(PrintStatements.enterText);
-                    if(Announcement.addAnnouncement(Input.getString())) System.out.println(PrintStatements.updateSuccessful);
+                    if(announcement.addAnnouncement(Input.getString())) System.out.println(PrintStatements.updateSuccessful);
                     else System.out.println(PrintStatements.updateFailed);
                     break;
                 case 2:
                     System.out.println(PrintStatements.selectFromOption);
-                    Announcement.viewAnnouncements();
-                    if(Announcement.removeAnnouncement((Input.getInteger()))) System.out.println(PrintStatements.updateSuccessful);
+                    announcement.viewAnnouncements();
+                    if(announcement.removeAnnouncement((Input.getInteger()))) System.out.println(PrintStatements.updateSuccessful);
                     else System.out.println(PrintStatements.updateFailed);
                     break;
                 case 3:
-                    Announcement.viewAnnouncements();
+                    announcement.viewAnnouncements();
                     break;
                 case 4: return;
                 default :
@@ -519,14 +531,23 @@ public class AdminDriver implements Driver{
         }
 
     }
+    private static void printAllProducts(){
+        System.out.println(PrintStatements.checkStockProduct);
+        for(int i=0;i<productsDatabase.products.size();i++){
+            System.out.println(productsDatabase.products.get(i).getProductId() +"      "+productsDatabase.products.get(i).getProductName()+"         "+productsDatabase.products.get(i).getQuantity());
+        }
+        System.out.println();
+    }
     private static void checkOrders(){
         order.printOrders();
         System.out.println(PrintStatements.selectFromOption);
+        System.out.println(PrintStatements.productHeader);
         order.printSpecificUserOrder(Input.getInteger());
     }
     private static void deliveryStatus(){
         order.readyOrders();
         System.out.println(PrintStatements.selectFromOption);
+        System.out.println(PrintStatements.productHeader);
         order.setReadyToDeliver(Input.getInteger());
     }
     private static void checkHistory(){
