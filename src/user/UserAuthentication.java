@@ -10,20 +10,17 @@ public class UserAuthentication {
         return userAuthentication;
     }
     private final HashMap<Long,String> userDetails = new HashMap<>();
-    public void addUser(Long mobileNo,String password){
+    void addUser(Long mobileNo,String password){
         userDetails.put(mobileNo,password);
     }
 
-    public boolean userCheck(long mobileNo,String password) {
-        for(Map.Entry<Long,String> entry : userDetails.entrySet()){
-            if(entry.getKey() == mobileNo && entry.getValue().equals(password)) return true;
+    boolean userCheck(long mobileNo,String password) {
+        if(userDetails.get(mobileNo) != null) {
+            return userDetails.get(mobileNo).equals(password);
         }
         return false;
     }
-    public boolean checkAlreadyExist(long mobileNo){
-        for(Map.Entry<Long,String> entry : userDetails.entrySet()){
-            if(entry.getKey() == mobileNo) return true;
-        }
-        return false;
+    boolean checkAlreadyExist(long mobileNo){
+        return userDetails.get(mobileNo) != null;
     }
 }

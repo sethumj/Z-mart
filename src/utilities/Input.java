@@ -15,7 +15,7 @@ public class Input {
                 return sc.nextInt();
             } catch (InputMismatchException e) {
                 sc.nextLine();
-                System.out.print(PrintStatements.inputError);
+                System.out.print(PrintStatements.INPUT_ERROR);
             }
         }
     }
@@ -28,7 +28,7 @@ public class Input {
                 if(inp.equals("")) throw new InputMismatchException();
                 return inp;
             } catch (InputMismatchException e) {
-                System.out.print(PrintStatements.inputError);
+                System.out.print(PrintStatements.INPUT_ERROR);
             }
         }
     }
@@ -40,7 +40,7 @@ public class Input {
             }
             catch(InputMismatchException e){
                 sc.nextLine();
-                System.out.print(PrintStatements.inputError);
+                System.out.print(PrintStatements.INPUT_ERROR);
             }
         }
     }
@@ -51,7 +51,7 @@ public class Input {
                 return sc.nextLong();
             } catch (InputMismatchException e) {
                 sc.nextLine();
-                System.out.print(PrintStatements.inputError);
+                System.out.print(PrintStatements.INPUT_ERROR);
             }
         }
     }

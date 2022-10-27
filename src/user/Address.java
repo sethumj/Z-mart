@@ -1,8 +1,9 @@
 package user;
 
-import superMarket.PincodesDb;
+import admin.PincodesDb;
 import utilities.Input;
 import utilities.PrintStatements;
+import utilities.Validation;
 
 public class Address {
     private String  houseNo;
@@ -20,24 +21,24 @@ public class Address {
     }
     private static PincodesDb pincodesDb = PincodesDb.getInstance();
     public static Address getAddress(){
-        System.out.println(PrintStatements.getAddress);
-        System.out.println(PrintStatements.addressHouseNo);
+        System.out.println(PrintStatements.GET_ADDRESS);
+        System.out.println(PrintStatements.ADDRESS_HOUSE_NO);
         String houseNo = Input.getString();
-        System.out.println(PrintStatements.addressStreet);
+        System.out.println(PrintStatements.ADDRESS_STREET);
         String street = Input.getString();
-        System.out.println(PrintStatements.addressArea);
+        System.out.println(PrintStatements.ADDRESS_AREA);
         String area = Input.getString();
-        System.out.println(PrintStatements.addressDistrict);
+        System.out.println(PrintStatements.ADDRESS_DISTRICT);
         String district = Input.getString();
-        System.out.println(PrintStatements.addressPincode);
+        System.out.println(PrintStatements.ADDRESS_PINCODE);
         int pincode;
         while(true) {
-            pincode =Input.getInteger();
+            pincode = Validation.getPincode();
             if (pincodesDb.checkPincode(pincode)) {
                 break;
             } else {
-                System.out.println(PrintStatements.notServiceable);
-                System.out.println(PrintStatements.justTryAgain);
+                System.out.println(PrintStatements.NOT_SERVICEABLE);
+                System.out.println(PrintStatements.JUST_TRY_AGAIN);
             }
         }
         return new Address(houseNo,street,area,district,pincode);

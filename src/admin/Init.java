@@ -1,7 +1,4 @@
-package init;
-
-import superMarket.*;
-import utilities.Help;
+package admin;
 
 import java.util.ArrayList;
 
@@ -36,7 +33,14 @@ public class Init {
         fruitsVegetables.getSubCategory().add("Herbs & Seasoning");
 
         dairy.getSubCategory().add("Dairy");
+        productsDatabase.addToDb(new Product("Amul Taaza Homogenised Toned milk 1L",20,70,4,"Dairy & Bakery","Dairy",new ArrayList<>(),"From zoho farms", productsDatabase.productId));
+        productsDatabase.addToDb(new Product("Nestle Milkmaid Sweetened Condensed Milk 400g",20,139,10,"Dairy & Bakery","Dairy",new ArrayList<>(),"From zoho farms", productsDatabase.productId));
+        productsDatabase.addToDb(new Product("Cavin's Vanilla Milkshake 200ml (Tetra Pak)",20,40,32,"Dairy & Bakery","Dairy",new ArrayList<>(),"From zoho farms", productsDatabase.productId));
+        productsDatabase.addToDb(new Product("Hershey's Chocolate Milkshake 180ml (Tetra pak)",20,35,34,"Dairy & Bakery","Dairy",new ArrayList<>(),"From zoho farms", productsDatabase.productId));
+        productsDatabase.addToDb(new Product("Milky Mist Set Curd 400g (Cup)",20,70,10,"Dairy & Bakery","Dairy",new ArrayList<>(),"From zoho farms", productsDatabase.productId));
         dairy.getSubCategory().add("Baked Cookies");
+        productsDatabase.addToDb(new Product("Honey almond and chocolate cookies 265g",20,550,32,"Dairy & Bakery","Baked Cookies",new ArrayList<>(),"From zoho bakery", productsDatabase.productId));
+        productsDatabase.addToDb(new Product("Nutella stuffed cookies 265g",20,650,32,"Dairy & Bakery","Baked Cookies",new ArrayList<>(),"From zoho bakery", productsDatabase.productId));
         dairy.getSubCategory().add("Cheese");
         dairy.getSubCategory().add("Ghee");
 
@@ -51,7 +55,7 @@ public class Init {
         beverages.getSubCategory().add("Fruit Juices");
         beverages.getSubCategory().add("Energy & Soft Drinks");
 
-        electronics.getSubCategory().add("Mobiles and Tables");
+        electronics.getSubCategory().add("Mobiles and Tablets");
         electronics.getSubCategory().add("TV & Speakers");
 
         pincodesDb.addPincode(123456);

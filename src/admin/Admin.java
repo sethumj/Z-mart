@@ -1,8 +1,8 @@
 package admin;
 
 public class Admin {
-     private static final String email = "admin@zohocorp.com";
-     private static final String password = "pass";
+     private static final String email = "a";
+     private static final String password = "a";
      public static boolean validateMail(String email){
         return email.equals(Admin.email);
     }
