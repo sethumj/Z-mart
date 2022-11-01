@@ -19,7 +19,7 @@ public class Validation {
     }
     public static long getMobileNo(){
         while(true){
-            long temp = Input.getInteger();
+            long temp = Input.getLong();
             if(Validation.checkMobileNo(temp)) return temp;
             else{
                 System.out.println(PrintStatements.INVALID_MOBILE_NO);

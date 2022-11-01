@@ -22,6 +22,7 @@ public class Help {
     public void viewHelps(){
         for(int i=0;i<help.helpDb.size();i++) System.out.println(i+1+"."+help.helpDb.get(i));
         System.out.println();
+        System.out.println();
     }
     boolean removeHelp(int index){
         if(index>help.helpDb.size()) return false;
